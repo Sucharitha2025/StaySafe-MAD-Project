@@ -18,7 +18,7 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         borderRadius: 7,
         borderColor: 'grey',
-        backgroundColor: 'white',
+        backgroundColor: 'red',
         alignItems: 'center',
         justifyContent: 'center',
         padding: 3,
@@ -30,3 +30,4 @@ const styles = StyleSheet.create({
 });
 
 export default Button;
+
