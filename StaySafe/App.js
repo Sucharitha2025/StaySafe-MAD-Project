@@ -2,15 +2,17 @@ import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View } from 'react-native';
 import Button from './src/UI/Button'
 
-export default function App() {
+export const App = () => {
   return (
     <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
+      <Text>Help</Text>
       <StatusBar style="auto" />
-      <Button label='Panic button' onClick={() => alert.Alert('Warning Button Pressed')}/>
+      <Button label='Panic button' onClick={() => alert.Alert('Warning Button Pressed')}
+        color="red"
+        />
     </View>
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -20,3 +22,5 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
 });
+
+export default App;
