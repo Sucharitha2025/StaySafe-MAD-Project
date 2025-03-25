@@ -5,7 +5,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import ProfileScreen from './src/Screens/ProfileScreen';
 import HomeScreen from './src/Screens/HomeScreen';
-import ContactScreen from './src/Screens/HomeScreen';
+import ContactScreen from './src/Screens/ContactScreen';
 import { navigationRef } from './src/Navigation/navigationRef';
 import { FontAwesome } from '@expo/vector-icons';
 import { Ionicons } from '@expo/vector-icons';
@@ -15,11 +15,13 @@ import { Feather } from '@expo/vector-icons';
 const Tab = createBottomTabNavigator();
 const App = () => {
   return (
+
     // <NavigationContainer>      
     //   <Stack.Navigator>
     //     <Stack.Screen name="Map" component={MapScreen} options={{ headerShown: false}}/>
     //   </Stack.Navigator>
     // </NavigationContainer>
+
     <NavigationContainer ref={navigationRef}>
       <Tab.Navigator
         screenOptions={({ route }) => ({
@@ -37,8 +39,6 @@ const App = () => {
             if(route.name === 'Home'){
               return <Feather name="home" size={size} color={color}/>;
             }
-
-      
 
             switch (route.name) {
               case 'Profile': 
