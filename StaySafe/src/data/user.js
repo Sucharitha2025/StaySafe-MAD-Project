@@ -1,4 +1,4 @@
-const users = [
+const user = [
     {
       "UserID": 1,
       "UserFirstname": "Aisha",
@@ -444,3 +444,6 @@ const users = [
       "UserImageURL": "https://static.generated.photos/vue-static/face-generator/landing/wall/13.jpg"
     }
 ];
+
+
+export default user;

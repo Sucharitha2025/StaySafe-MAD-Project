@@ -1,19 +1,26 @@
  import { View, StyleSheet, Dimensions, TextInput, TouchableOpacity, Text, Keyboard } from 'react-native'
- import MapView, { Animated, Marker } from 'react-native-maps';
- import React, { lazy, useRef, useState } from 'react'
+ import MapView, { Animated, Callout, Marker } from 'react-native-maps';
+ import React, { useRef, useState } from 'react'
+ import user from '../data/user';
+ import { Image } from 'react-native';
 
  const { width, height } = Dimensions.get("window");
  const ASPECT_RATIO = width / height;
  const LATITUDE_DELTA = 0.02;
  const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
- const INITIAL_LAT = 28.46254;
- const INITIAL_LNG = -81.397272;
+ const INITIAL_LAT = 51.594;
+ const INITIAL_LNG = -0.163937;
  const INITIAL_POSITION = {
    latitude: INITIAL_LAT,
    longitude: INITIAL_LNG,
    latitudeDelta: LATITUDE_DELTA,
    longitudeDelta: LONGITUDE_DELTA,
  };
+
+ const Users = user.filter(
+  u => 
+    u.UserLatitude !== 0 && u.UserLongitude !== 0 && !u.UserFirstname.toLowerCase().includes('users')
+ );
 
  const HomeScreen = () => {
    const [searchText, setSearchText] = useState('');
@@ -37,10 +44,9 @@
        if (json && json.results) {
         const coords = json.results.map((item) => ({
           latitude: item.geometry.location.lat,
-            longitude: item.geometry.location.lng,
+          longitude: item.geometry.location.lng,
         }))
         setResults(json.results);
-
         if (coords.length) {
           map.current?.fitToCoordinates(coords, {
             edgePadding: {
@@ -62,7 +68,9 @@
    return(
      <View style={styles.container}>
        <MapView ref={map} style={styles.map} initialRegion={INITIAL_POSITION}>
+        
         {results.map((item, i) => {
+          //search result marker
           const coord = {
             latitude: item.geometry.location.lat,
             longitude: item.geometry.location.lng,
@@ -71,26 +79,46 @@
           <Marker key={`search-item-${i}`} coordinate={coord} title={item.name} description=''
           /> 
         );
-        })}
+        })} 
+
+        {Users.map((users, index) => (
+          <Marker
+            key={`user-marker-${users.UserID}-${index}`}
+            coordinate={{
+              latitude: users.UserLatitude,
+              longitude: users.UserLongitude,
+          }}
+          >
+            <Callout tooltip>
+              <View style={styles.buttons}>
+                <Image 
+                  source={{ uri : users.UserImageURL}}
+                  style={styles.images}
+                />
+                <Text style={styles.names}>{users.UserFirstname} {users.UserLastname}</Text>
+                <Text style={styles.usernames}>@{users.UserUsername}</Text>
+                <Text style={styles.phones}>{users.UserPhone}</Text>
+              </View>
+            </Callout>
+          </Marker>
+        ))}
        </MapView>
-        
+       
        <View style={styles.searchBox}>
-         <Text style={styles.searchBoxLabel}/>
+        <Text style={styles.searchBoxLabel}/>
+        <TextInput 
+        style={styles.searchBoxField}
+        onChangeText={setSearchText}
+        value={searchText}
+        autoCapitalize='sentences' 
+        placeholder='Search places, parks, shops...'
+        />
+        <TouchableOpacity style={styles.buttonContainer} onPress={searchPlaces}>
+          <Text style={styles.buttonLabel}>Search</Text>
+        </TouchableOpacity>
 
-         <TextInput 
-         style={styles.searchBoxField}
-         onChangeText={setSearchText}
-         value={searchText}
-         autoCapitalize='sentences' 
-         placeholder='Search places, parks, shops...'
-         />
-
-         <TouchableOpacity style={styles.buttonContainer} onPress={searchPlaces}>
-           <Text style={styles.buttonLabel}>Search</Text>
-         </TouchableOpacity>
 
        </View>
-
      </View>
    );
  }
@@ -125,11 +153,11 @@
     },
 
    searchBoxField: {
-     borderColor: "#777",
+     borderColor: "#777", //gray
      borderWidth: 1,
      borderRadius: 3,
      paddingHorizontal: 8,
-     paddingVertical: 13,
+     paddingVertical: 17,
      fontSize: 18,
      marginBottom: 10,
      backgroundColor: "white",
@@ -138,10 +166,20 @@
      color: '#333',
    },
 
-   buttonContainer: {
+   buttons: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: 'white',
+    paddingVertical: 17,
+    borderRadius: 20,
+    elevation: 4,
+    padding: 7,
+   },
+
+   buttonContainer: { 
      alignItems: 'center',
      justifyContent: 'center',
-     backgroundColor: '#26f',
+     backgroundColor: '#26f', 
      paddingVertical: 14,
      borderRadius: 30,
      elevation: 4,
@@ -149,6 +187,7 @@
      shadowOffset: { width: 0, height: 2 },
      shadowOpacity: 0.3,
      shadowRadius: 3,
+     //padding: 2,
     },
 
    buttonLabel: {
@@ -156,4 +195,36 @@
      color: 'white',
      fontWeight: '600',
    },
+
+  calloutContainer: {
+    backgroundColor: 'white',
+    borderRadius: 10,
+    padding: 10,
+    width: 200,
+    alignItems: 'center',
+    shadowColor: '#000', //black
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.3,
+    shadowRadius: 4,
+    elevation: 6,
+  },
+
+  images: {
+    width: 60,
+    height: 60,
+    borderRadius: 30,
+    marginBottom: 8,
+  },
+
+  usernames: {
+    color: '#555',
+    fontSize: 14,
+  },
+
+  phones: {
+    color: '#888',
+    fontSize: 13,
+    marginTop: 4,
+  },
+
  });
