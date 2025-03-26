@@ -1,4 +1,5 @@
-import { Pressable, StyleSheet, Text, View, Image } from 'react-native';
+import { Pressable, StyleSheet, Text, View, Image  } from 'react-native';
+
 
 const UserItem = ({ user, onSelect }) => {
   return (
@@ -6,7 +7,7 @@ const UserItem = ({ user, onSelect }) => {
     <View style={styles.item}>
       <Image source={{ uri: user.UserImageURL  }} style={styles.image} />
       <Text style={styles.text}>
-        {user.UserID} {user.UserLastname} - {user.UserUsername}
+        {user.UserFirstName} {user.UserLastname} - {user.UserUsername}
       </Text>
     </View>
   </Pressable>

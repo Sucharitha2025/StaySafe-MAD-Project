@@ -1,6 +1,6 @@
 import { StyleSheet } from 'react-native';
 import Screen from '../layout/Screen';
-import UserList from '../entity/users/UserItem.js';
+import UserList from '../entity/users/UserList.js';
 
 import initialUsers from '../../data/users.js';
 
