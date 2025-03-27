@@ -3,8 +3,7 @@
  import React, { useRef, useState } from 'react'
  import user from '../../data/user';
  import { Image } from 'react-native';
-
-
+ import {GOOGLE_API_Key} from '@env' //Google Api key in .env file
 
  const { width, height } = Dimensions.get("window");
  const ASPECT_RATIO = width / height;
@@ -36,7 +35,7 @@
 
      const input = searchText.trim()
      const location = `${INITIAL_LAT}, ${INITIAL_LNG}&radius=2000`
-     const url = `${googleApiURL}?query=${input}&location=${location}&key=AIzaSyB9k3Oi6n97QNP2FmvdAzgR7Wr0SnZM4ms`
+     const url = `${googleApiURL}?query=${input}&location=${location}&key=${GOOGLE_API_Key}`
 
      try {
        const resp = await fetch(url)

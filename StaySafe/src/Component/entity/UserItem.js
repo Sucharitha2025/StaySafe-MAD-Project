@@ -1,42 +1,38 @@
-import { Pressable, StyleSheet, Text, View, Image } from 'react-native';
+import { StyleSheet, Text, View} from 'react-native';
+import Selector from '../UI/Selector';
+import Favourite from '../UI/Favourite';
 
-const UserItem = ({ user, onSelect }) => {
-  
-  return (
-    <Pressable onPress={() => onSelect(user)}>
-      <View style={styles.item}>
-        <Image source={{ uri: user.UserImageURL }} style={styles.image} />
-        <View style={styles.textContainer}>
-          <Text style={styles.name}>{user.UserFirstName} {user.UserUsername}</Text>
-        </View>
-      </View>
-    </Pressable>
-  );
+const UserItem = ({ user, onSelect, onFavourite }) => {
+
+    const handleSelect = () => onSelect(user);
+    const handleFavourite = () => onFavourite(user);
+
+    return(
+        <Selector onPress={handleSelect} pressedStyle={styles.pressedItem}>
+            <View style={styles.item}>
+                <Favourite isFavourite={user.UserFavourite} onSelect={handleFavourite} />
+                <Text style={styles.text}>
+                    {user.UserFirstname} {user.UserLastname} 
+                </Text>
+            </View>
+        </Selector>
+    );
 };
 
 const styles = StyleSheet.create({
-  container: {
-    paddingHorizontal: 15,
-  },
-  item: {
-    paddingVertical: 15,
-    borderTopWidth: 1,
-    borderColor: 'lightgray',
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  image: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    marginRight: 10,
-  },
-  textContainer: {
-    flexDirection: 'column',
-  },
-  name: {
-    fontSize: 16,
-  },
+    item: {
+        paddingVertical: 15,
+        borderBottomWidth: 1,
+        borderColor: 'lightgrey',
+        flexDirection: 'row',
+    },
+    text: {
+        fontSize: 16,
+        paddingLeft: 10,
+    },
+    pressedItem: {
+        backgroundColor: 'azure',
+    },
 });
 
 export default UserItem;

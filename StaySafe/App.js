@@ -14,6 +14,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import ContactListScreen from './src/Component/ContactScreens/ContactListScreen';
 import ContactAddScreen from './src/Component/ContactScreens/ContactAddScreen';
 import ContactViewScreen from './src/Component/ContactScreens/ContactViewScreen';
+import ContactModifyScreen from './src/Component/ContactScreens/ContactModifyScreen';
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -44,6 +45,13 @@ function UserStack() {
       component={ContactViewScreen}
       options={{ title: 'View Contacts'}}
       />
+
+      <Stack.Screen 
+      name='ContactModifyScreen'
+      component={ContactModifyScreen}
+      options={{ title: 'Modify'}}
+      />
+
     </Stack.Navigator>
   )
 }

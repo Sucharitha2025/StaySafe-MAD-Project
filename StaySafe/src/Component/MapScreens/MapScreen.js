@@ -5,9 +5,8 @@ import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplet
 import 'react-native-get-random-values';
 import { useState } from 'react';
 import MapViewDirections from 'react-native-maps-directions';
+import {GOOGLE_API_Key} from '@env';
 
-
-const Google_API_Key = 'AIzaSyB9k3Oi6n97QNP2FmvdAzgR7Wr0SnZM4ms';
 
 //setting up initial posisiton for the map
 const { width, height } = Dimensions.get("window"); //screen width and height 
@@ -36,7 +35,7 @@ function InputAutocomplete({label, placeholder, onPlaceSelected}){
           onPlaceSelected(details);
         }}
         query={{
-          key: Google_API_Key,
+          key: GOOGLE_API_Key,
           language: "pt-BR",
         }}
       />
@@ -112,7 +111,7 @@ const MapScreen = () => {
           <MapViewDirections 
           origin={origin} 
           destination={destination} 
-          apikey = {Google_API_Key}
+          apikey = {GOOGLE_API_Key}
           strokeColor='#c30010' //red
           strokeWidth={3} // direction line width 
           onReady={traceOnReady}

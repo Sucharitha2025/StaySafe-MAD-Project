@@ -1,261 +1,108 @@
-import React, { useState, useRef } from "react";
-import { StyleSheet, Text, View, TextInput, TouchableOpacity, ScrollView, SafeAreaView, StatusBar, Dimensions } from "react-native";
-import { Ionicons, Octicons, MaterialIcons, FontAwesome } from "@expo/vector-icons";
-import { widthPercentageToDP as wp, heightPercentageToDP as hp } from "react-native-responsive-screen";
+import { View, Text, TextInput, Button, TouchableOpacity, ScrollView } from 'react-native';
+import React, { useState } from 'react';
 
+const statusOptions = [
+  { value: 1, label: 'Planned' },
+  { value: 2, label: 'Started' },
+  { value: 3, label: 'Paused' },
+  { value: 4, label: 'Cancelled' },
+  { value: 5, label: 'Completed' },
+  { value: 6, label: 'Panic' },
+];
 
-export default function ActivityScreen() {
-  const [name, setName] = useState("");
-  const [activityName, setActivityName] = useState("");
-  const [description, setDescription] = useState("");
-  const [startLocation, setStartLocation] = useState("");
-  const [endLocation, setEndLocation] = useState("");
-  const [statusId, setStatusId] = useState(null);
+const ActivityScreen = () => {
+  const [departure, setDeparture] = useState('');
+  const [destination, setDestination] = useState('');
+  const [departureTime, setDepartureTime] = useState('');
+  const [eta, setETA] = useState('');
+  const [status, setStatus] = useState('Planned');
+  const [sharedActivity, setSharedActivity] = useState([]);
+
+  const shareActivity = () => {
+    const newActivity = {
+      id: Date.now().toString(),
+      departure,
+      destination,
+      departureTime,
+      eta,
+      status,
+    };
+    setSharedActivity([...sharedActivity, newActivity]);
+    setDeparture('');
+    setDestination('');
+    setDepartureTime('');
+    setETA('');
+    setStatus('Planned');
+  };
 
   return (
-    <SafeAreaView style={styles.container}>
-      <StatusBar barStyle="light-content" />
-      <ScrollView contentContainerStyle={styles.scrollContainer}>
-        <Text style={styles.title}>Activity Tracker</Text>
+    <View style={{ flex: 1 }}>
+      <ScrollView contentContainerStyle={{ padding: 20, paddingBottom: 100 }}>
+        <Text style={{ fontSize: 24, marginBottom: 10, padding: 8, textAlign: 'center', fontWeight: 'bold', top: 50 }}>Share Your Activity</Text>
 
-        <View style={styles.formContainer}>
-        
-          <View style={styles.inputContainer}>
-            <Text style={styles.label}>Name</Text>
-            <View
+        <TextInput
+          placeholder="Departure Location"
+          value={departure}
+          onChangeText={setDeparture}
+          style={{ borderWidth: 1, marginBottom: 10, padding: 8, top: 60 }}
+        />
+
+        <TextInput
+          placeholder="Destination"
+          value={destination}
+          onChangeText={setDestination}
+          style={{ borderWidth: 1, marginBottom: 10, padding: 8, top: 65 }}
+        />
+
+        <TextInput
+          placeholder="Departure Time"
+          value={departureTime}
+          onChangeText={setDepartureTime}
+          style={{ borderWidth: 1, marginBottom: 10, padding: 8, top: 70 }}
+        />
+
+        <TextInput
+          placeholder="ETA"
+          value={eta}
+          onChangeText={setETA}
+          style={{ borderWidth: 1, marginBottom: 10, padding: 8, top: 75 }}
+        />
+
+        <Text style={{ fontWeight: '400', marginBottom: 5, top: 80, fontSize: 20, }}>Status</Text>
+        <View style={{ flexDirection: 'row', marginBottom: 10, flexWrap: 'wrap', top: 85 }}>
+          {statusOptions.map((s) => (
+            <TouchableOpacity
+              key={s.value}
+              onPress={() => setStatus(s.label)}
               style={{
-                height: hp(7),
-                flexDirection: "row",
-                gap: 16,
-                backgroundColor: "#2A2A2A",
-                alignItems: "center",
-                borderRadius: 16,
-                padding: 16,
+                backgroundColor: status === s.label ? '#007AFF' : '#E0E0E0',
+                padding: 10,
+                margin: 5,
+                borderRadius: 5,
               }}
             >
-              <FontAwesome name="user" size={hp(2.7)} color="gray" />
-              <TextInput
-                value={name}
-                onChangeText={setName}
-                style={{
-                  fontSize: hp(2),
-                  flex: 1,
-                  fontWeight: "600",
-                  color: "#fff",
-                  backgroundColor: "#2A2A2A",
-                }}
-                placeholder="Enter your name"
-                placeholderTextColor="gray"
-              />
-            </View>
-          </View>
-
-          <View style={styles.inputContainer}>
-            <Text style={styles.label}>Activity Name</Text>
-            <View
-              style={{
-                height: hp(7),
-                flexDirection: "row",
-                gap: 16,
-                backgroundColor: "#2A2A2A",
-                alignItems: "center",
-                borderRadius: 16,
-                padding: 16,
-              }}
-            >
-              <TextInput
-                value={activityName}
-                onChangeText={setActivityName}
-                style={{
-                  fontSize: hp(2),
-                  flex: 1,
-                  fontWeight: "600",
-                  color: "#fff",
-                  backgroundColor: "#2A2A2A",
-                }}
-                placeholder="What are you doing?"
-                placeholderTextColor="gray"
-              />
-            </View>
-          </View>
-
-          <View style={styles.inputContainer}>
-            <Text style={styles.label}>Activity Description</Text>
-            <View
-              style={{
-                minHeight: hp(12),
-                flexDirection: "row",
-                gap: 16,
-                backgroundColor: "#2A2A2A",
-                alignItems: "flex-start",
-                borderRadius: 16,
-                padding: 16,
-              }}
-            >
-              <TextInput
-                value={description}
-                onChangeText={setDescription}
-                style={{
-                  fontSize: hp(2),
-                  flex: 1,
-                  fontWeight: "600",
-                  color: "#fff",
-                  backgroundColor: "#2A2A2A",
-                }}
-                placeholder="Describe your activity..."
-                placeholderTextColor="gray"
-                multiline
-                numberOfLines={4}
-                textAlignVertical="top"
-              />
-            </View>
-          </View>
-
-          <View style={styles.locationsContainer}>
-
-            <View style={styles.locationSection}>
-              <Text style={styles.locationLabel}>Start Location</Text>
-              <View
-                style={{
-                  height: hp(7),
-                  flexDirection: "row",
-                  gap: 16,
-                  backgroundColor: "#2A2A2A",
-                  alignItems: "center",
-                  borderRadius: 16,
-                  padding: 16,
-                }}
-              >
-                <Ionicons name="location" size={hp(2.7)} color="#8B5CF6" />
-                <TextInput
-                  value={startLocation}
-                  onChangeText={setStartLocation}
-                  style={{
-                    fontSize: hp(2),
-                    flex: 1,
-                    fontWeight: "600",
-                    color: "#fff",
-                    backgroundColor: "#2A2A2A",
-                  }}
-                  placeholder="Enter starting point"
-                  placeholderTextColor="gray"
-                />
-              </View>
-            </View>
-
-            
-            <View style={styles.locationSection}>
-              <Text style={styles.locationLabel}>End Location</Text>
-              <View
-                style={{
-                  height: hp(7),
-                  flexDirection: "row",
-                  gap: 16,
-                  backgroundColor: "#2A2A2A",
-                  alignItems: "center",
-                  borderRadius: 16,
-                  padding: 16,
-                }}
-              >
-                <Ionicons name="flag" size={hp(2.7)} color="#EC4899" />
-                <TextInput
-                  value={endLocation}
-                  onChangeText={setEndLocation}
-                  style={{
-                    fontSize: hp(2),
-                    flex: 1,
-                    fontWeight: "600",
-                    color: "#fff",
-                    backgroundColor: "#2A2A2A",
-                  }}
-                  placeholder="Enter destination"
-                  placeholderTextColor="gray"
-                />
-              </View>
-            </View>
-          </View>
-
-         
-          <TouchableOpacity style={styles.button}>
-            <Text style={styles.buttonText}>Save Activity</Text>
-          </TouchableOpacity>
+              <Text style={{ color: status === s.label ? '#fff' : '#000' }}>{s.label}</Text>
+            </TouchableOpacity>
+          ))}
         </View>
-      </ScrollView>
-    </SafeAreaView>
-  );
-}
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#121212",
-  },
-  scrollContainer: {
-    padding: 20,
-  },
-  title: {
-    fontSize: 28,
-    fontWeight: "bold",
-    color: "#fff",
-    marginBottom: 30,
-    textAlign: "center",
-  },
-  formContainer: {
-    backgroundColor: "#1E1E1E",
-    borderRadius: 15,
-    padding: 20,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.3,
-    shadowRadius: 8,
-    elevation: 5,
-  },
-  inputContainer: {
-    marginBottom: 20,
-  },
-  label: {
-    fontSize: 16,
-    fontWeight: "600",
-    color: "#CCC",
-    marginBottom: 8,
-  },
-  locationsContainer: {
-    marginVertical: 15,
-  },
-  locationSection: {
-    marginBottom: 10,
-  },
-  locationLabel: {
-    fontSize: 16,
-    fontWeight: "600",
-    color: "#CCC",
-    marginBottom: 8,
-  },
-  dottedLineContainer: {
-    alignItems: "center",
-    justifyContent: "space-evenly",
-    height: 100,
-    marginVertical: 5,
-  },
-  dot: {
-    width: 8,
-    height: 8,
-    borderRadius: 4,
-    backgroundColor: "#8B5CF6",
-    marginVertical: 4,
-  },
-  button: {
-    backgroundColor: "#8B5CF6",
-    borderRadius: 16,
-    padding: 16,
-    alignItems: "center",
-    marginTop: 20,
-    height: hp(7),
-    justifyContent: "center",
-  },
-  buttonText: {
-    color: "#FFF",
-    fontSize: hp(2),
-    fontWeight: "bold",
-  },
-});
+        <Text style={{ fontSize: 20, marginTop: 20, top: 70,  }}>Shared Trips</Text>
+        {sharedActivity.map((item) => (
+          <View key={item.id} style={{ borderBottomWidth: 1, marginVertical: 10, top: 75 }}>
+            <Text>Starting Point: {item.departure}</Text>
+            <Text>Destination: {item.destination}</Text>
+            <Text>Departs: {item.departureTime}</Text>
+            <Text>ETA: {item.eta}</Text>
+            <Text>Status: {item.status}</Text>
+          </View>
+        ))}
+      </ScrollView>
+
+      <View style={{ position: 'absolute', bottom: 20, left: 20, right: 20 }}>
+        <Button title="Share Activity" onPress={shareActivity} />
+      </View>
+    </View>
+  );
+};
+
+export default ActivityScreen;

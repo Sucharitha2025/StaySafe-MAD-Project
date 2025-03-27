@@ -1,16 +1,25 @@
-import {  ScrollView, StyleSheet } from 'react-native';
-import UserItem from './UserItem';
+import {ScrollView, StyleSheet} from 'react-native';
+import UserItem from './UserItem.js';
 
-const UserList = ({ users, onSelect }) => {
-  return (
-    <ScrollView style={styles.container}>
-    {users.map((user) => {
-      return <UserItem key={user.UserID} user={user} onSelect={onSelect} />;
-    })}
-  </ScrollView>
-  );
+
+const UserList = ({ users, onSelect, onFavourite }) => {
+
+    return (
+        <ScrollView style={styles.container}>
+            {users.map((user) => (
+                <UserItem 
+                    key={user.UserID} 
+                    user={user} 
+                    onSelect={onSelect} 
+                    onFavourite={onFavourite} 
+                />
+            ))}
+        </ScrollView>
+    );
 };
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+    container: {},
+});
 
-export default UserList;
+export default UserList; 

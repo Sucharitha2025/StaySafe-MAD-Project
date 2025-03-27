@@ -1,17 +1,16 @@
-import { StyleSheet, Text } from "react-native";
-import Screen from "../layout/Screen";
-import UserView from "../entity/UserView";
+import { StyleSheet } from 'react-native';
+import Screen from '../layout/Screen';
+import UserView from '../entity/UserView';
 
-const ContactViewScreen = ({ route }) => {
-  const { user } = route.params;
-  console.log('Received all user data:', user);
+const ContactViewScreen = ({ navigation, route }) => {
+
+  const { user, onDelete, onModify } = route.params;
+
+  const gotoModifyScreen = () => navigation.navigate('ContactModifyScreen', { user, onModify });
 
   return (
     <Screen>
-      
-      <UserView user={user} />
-      
-      <Text> </Text>
+      <UserView user={user} onDelete={onDelete} onModify={gotoModifyScreen} />
     </Screen>
   );
 };

@@ -1,22 +1,21 @@
-import { StatusBar } from "expo-status-bar";
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet } from 'react-native';
+import Screen from '../layout/Screen';
+import UserForm from '../entity/UserForm';
 
-const ContactAddScreen = () => {
-  return(
-    <View style={styles.container}>
-      <Text>Add</Text>
-      <StatusBar style='light' />
-    </View>
+
+const ContactAddScreen = ({ navigation, route }) => {
+  const { onAdd } = route.params;
+  
+  const handleCancel = () => navigation.goBack();
+
+
+  return (
+    <Screen>
+      <UserForm onSubmit={onAdd} onCancel={handleCancel} />
+    </Screen>
   );
 };
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
+const styles = StyleSheet.create({});
 
 export default ContactAddScreen;

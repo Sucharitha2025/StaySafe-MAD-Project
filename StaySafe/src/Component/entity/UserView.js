@@ -1,38 +1,68 @@
-import React from 'react';
-import { View, Text, Image, StyleSheet } from 'react-native';
+import { Alert, StyleSheet, Text, View } from 'react-native';
+import FullWidthImage from 'react-native-fullwidth-image';
+import Icons from '../UI/Icon';
+import { Button, ButtonTray } from '../UI/Button';
 
-const UserView = ({ user }) => {
-  return (
-    <View style={styles.container}>
-      <Image source={{ uri: user.UserImageURL }} style={styles.image} />
-      <Text style={styles.name}>{user.UserFirstname} {user.UserLastname}</Text>
-      <Text style={styles.phone}>{user.UserPhone}</Text>
-      <Text style={styles.username}>{user.UserUsername}</Text>
-    </View>
+const UserView = ({ user, onDelete, onModify }) => {
+
+  const handleDelete = () => onDelete(user);
+
+  const requestDelete = () => Alert.alert(
+    'Delete warning',
+    `Are you sure that you want to delete contact ${user.UserFirstname} ${user.UserLastname}`,
+    [
+        { text: 'Cancel' },
+        { text: 'Delete', onPress: handleDelete }
+    ],
+    { cancelable: true }
   );
+
+return(
+    <View style={styles.container}>
+      <FullWidthImage source={{ uri: user.UserImageURL }} style={styles.image} />
+
+      <View style={styles.infoTray}>
+      <Text style={styles.boldText}>
+        {user.UserFirstname} {user.UserLastname} 
+      </Text>
+
+      <Text style={styles.text}>
+        {user.UserUsername}<Text style={styles.dimText}></Text>
+      </Text>
+
+      <Text style={styles.text}>
+        {user.UserPhone}<Text style={styles.dimText}></Text>
+      </Text>
+    </View>
+
+    <ButtonTray>
+        <Button icon={<Icons.Edit />} label='Modify' onClick={onModify} />
+        <Button icon={<Icons.Delete />} label='Delete' onClick={requestDelete} />
+    </ButtonTray>
+    </View>
+    );
 };
 
 const styles = StyleSheet.create({
     container: {
-      padding: 20,
-      alignItems: 'center',
-    },
+        gap: 15,
+    }, 
     image: {
-      width: 200,
-      height: 200,
-      borderRadius: 100,
-      marginBottom: 20,
+        borderRadius: 3,
     },
-    name: {
-      fontSize: 24,
-      fontWeight: 'bold',
+    infoTray: {
+        gap: 5,
     },
-    phone: {
-      fontSize: 16,
+    text: {
+        fontSize: 16,
     },
-    username: {
-      fontSize: 16,
+    boldText: {
+        fontSize: 16,
+        fontWeight: 'bold',
     },
-  });
-  
-  export default UserView;
+    dimText: {
+        color: 'grey',
+    },
+});
+
+export default UserView;
