@@ -7,23 +7,113 @@ import ProfileScreen from './src/Screens/ProfileScreen';
 import HomeScreen from './src/Screens/HomeScreen';
 //import ContactListScreen from './src/Screens/ContactListScreen';
 //import ContactScreen from './src/Screens/ContactScreen';
-import { navigationRef } from './src/Navigation/navigationRef';
-import { FontAwesome } from '@expo/vector-icons';
 import { Ionicons } from '@expo/vector-icons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { Feather } from '@expo/vector-icons';
-
-const Stack = createNativeStackNavigator();
+import ContactScreen from './src/Screens/ContactScreen';
+import { AuthProvider,useAuth } from './src/Context/authContext';
+import ForgotPassword from './src/Screens/ForgotPassword';
+import SignIn from './src/Screens/SignIn';
+import { useEffect } from 'react';
+import ActivityScreen from './src/Screens/ActivityScreen';
+//const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 
 
-const App = () => {
-  return (
-    
-  <NavigationContainer>
-    <Tab.Navigator
-      screenOptions={({ route }) => ({
+
+
+// const MainScreen = () => {
+//   return (
+//     <Tab.Navigator
+//       screenOptions={({ route }) => ({
+//         tabBarIcon: ({ color, size }) => {
+//           if (route.name === "Map") {
+//             return (
+//               <MaterialCommunityIcons
+//                 name="map-marker-radius-outline"
+//                 size={size}
+//                 color={color}
+//               />
+//             );
+//           }
+//           if (route.name === "Contacts") {
+//             return (
+//               <MaterialCommunityIcons
+//                 name="contacts-outline"
+//                 size={size}
+//                 color={color}
+//               />
+//             );
+//           }
+//           if(route.name === 'Activity'){
+//             <Feather name="activity" size={size} color={color}/>
+//           }
+//           if (route.name === "Home") {
+//             return <Feather name="home" size={size} color={color} />;
+//           }
+//           return <Ionicons name="person-outline" size={size} color={color} />;
+//         },
+//         headerShown: false,
+//       })}
+//     >
+      
+      
+//       <Tab.Screen name="Home" component={HomeScreen} />
+//       <Tab.Screen name="Map" component={MapScreen} />
+//       <Tab.Screen name="Contacts" component={ContactScreen} />
+//       <Tab.Screen name="Activity" component={ActivityScreen}/>
+//       <Tab.Screen name="Profile" component={ProfileScreen} />
+
+//     </Tab.Navigator>
+//   );
+// };
+
+// // Auth navigator with conditional rendering based on authentication state
+// const RootNavigator = () => {
+//   const { isAuthenticated, currentUser } = useAuth();
+
+//   useEffect(() => {
+//     console.log("RootNavigator - Auth state:", isAuthenticated() ? "Authenticated" : "Not authenticated");
+//     console.log("Current user:", currentUser ? currentUser.UserFirstname : "None");
+//   }, [isAuthenticated, currentUser]);
+  
+  
+//   return (
+//     <NavigationContainer>
+//       <Stack.Navigator screenOptions={{ headerShown: false }}>
+//         {isAuthenticated() ? (
+//           <Stack.Screen name="Main" component={MainScreen} />
+//         ) : (
+//           <>
+//             <Stack.Screen name="SignIn" component={SignIn} />
+//             <Stack.Screen name="ForgotPassword" component={ForgotPassword} />
+//           </>
+//         )}
+//       </Stack.Navigator>
+//     </NavigationContainer>
+//   );
+// };
+
+// // Main App component wrapped with AuthProvider
+// const App = () => {
+//   return (
+//     <AuthProvider>
+//       <RootNavigator />
+//     </AuthProvider>
+//   );
+// };
+
+// export default App;
+const App =()=>{
+  return(
+    <NavigationContainer>
+      <Tab.Navigator
+        screenOptions={({ route }) => ({
         tabBarIcon: ({ color, size }) => {
+
+          if(route.name === 'Activity'){
+            <Feather name="activity" size={size} color={color}/>
+          }
           if (route.name === "Map") {
             return (
               <MaterialCommunityIcons
@@ -33,7 +123,7 @@ const App = () => {
               />
             );
           }
-          if (route.name === "Contact") {
+          if (route.name === "Contacts") {
             return (
               <MaterialCommunityIcons
                 name="contacts-outline"
@@ -45,19 +135,23 @@ const App = () => {
           if (route.name === "Home") {
             return <Feather name="home" size={size} color={color} />;
           }
-
           return <Ionicons name="person-outline" size={size} color={color} />;
         },
         headerShown: false,
       })}
-    >
-      <Tab.Screen name="Home" component={HomeScreen} />
-      <Tab.Screen name="Map" component={MapScreen} />
-      <Tab.Screen name="Profile" component={ProfileScreen} />
-    </Tab.Navigator>
-  </NavigationContainer>
-    
+      >
+      
+        
+        <Tab.Screen name="Home" component={HomeScreen} />
+        <Tab.Screen name="Map" component={MapScreen} />
+        <Tab.Screen name="Contacts" component={ContactScreen} />
+        <Tab.Screen name="Activity" component={ActivityScreen}/>
+        <Tab.Screen name="Profile" component={ProfileScreen} />
+
+      </Tab.Navigator>
+    </NavigationContainer>
+
   )
 }
 
-export default App;
+export default App

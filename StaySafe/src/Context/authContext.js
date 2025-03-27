@@ -7,7 +7,7 @@ export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
   const [currentUser, setCurrentUser] = useState(null);
-
+// authenticate login credientials 
   const login = async (username, password) => {
     const user = users.find(
       (u) =>
@@ -22,14 +22,26 @@ export const AuthProvider = ({ children }) => {
       return { success: false, msg: "Invalid username or password" };
     }
   };
+// reset password 
+  const resetPassword =()=>{
+    return { success: true, msg: "Password reset successful" };
+  }
+
+  // logout
 
   const logout = () => {
     setCurrentUser(null);
   };
 
+
+// check authetication state to allow users to sign in 
+  const isAuthenticated =()=>{
+    return currentUser !==null;
+  }
+
   return (
     <AuthContext.Provider
-      value={{ user, isAuthenticated, login, register, logout }}
+      value={{ user, isAuthenticated, login, logout, resetPassword }}
     >
       {children}
     </AuthContext.Provider>

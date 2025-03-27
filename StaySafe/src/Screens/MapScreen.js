@@ -52,6 +52,8 @@ const MapScreen = () => {
   const [origin, setOrigin] = useState("");
   const [destination, setDestination] = useState("");
   const [showDestination, setShowDestination] = useState(false);
+  const [distance, setDistance] = useState(0);
+  const [duration, setDuration] = useState(0);
   const mapRef = useRef(null);
 
   const moveTo = async (position) => {
@@ -61,6 +63,29 @@ const MapScreen = () => {
       mapRef.current?.animateCamera(camera, {duration: 1000});
     }
   };
+
+  const edgePaddingValue = 180 //making sure the two markers are center of the screen
+
+  const edgePadding = {
+    top: edgePaddingValue,
+    right: edgePaddingValue,
+    bottom: edgePaddingValue,
+    left: edgePaddingValue,
+  };
+
+  const traceOnReady = (args) => {
+    if (args) {
+      setDistance(args.distance)
+      setDuration(args.duration)
+    }
+  }
+
+  const trace = () => {
+    if (origin && destination) {
+      setShowDestination(true)
+      mapRef.current?.fitToCoordinates([origin, destination], {edgePadding})
+    }
+  }
 
   const onPlaceSelected = (details, flag) => {
     const set = flag === "origin" ? setOrigin : setDestination;
@@ -81,14 +106,16 @@ const MapScreen = () => {
       initialRegion={INITIAL_POSITION} 
       >
 
-        {origin && <Marker coordinate={origin} />}
-        {destination && <Marker coordinate={destination} />}
-
+        {origin && <Marker coordinate={origin} pinColor='red' />}
+        {destination && <Marker coordinate={destination} pinColor='red' />}
         {showDestination && origin && destination && (
           <MapViewDirections 
           origin={origin} 
           destination={destination} 
           apikey = {Google_API_Key}
+          strokeColor='#c30010' //red
+          strokeWidth={3} // direction line width 
+          onReady={traceOnReady}
           />
         )} 
 
@@ -98,9 +125,16 @@ const MapScreen = () => {
        <InputAutocomplete placeholder= 'Starting point' onPlaceSelected={(details) => onPlaceSelected(details, "origin")} />
        <InputAutocomplete placeholder= 'Destination' onPlaceSelected={(details) => onPlaceSelected(details, "destination")} />
 
-       <TouchableOpacity style={styles.buttons} onPress={() => setShowDestination(true)}>
+       <TouchableOpacity style={styles.buttons} onPress={trace}>
         <Text style={styles.buttonsText}>Search </Text>
        </TouchableOpacity>
+
+       {distance && duration ? (
+        <View style={styles.infoBox}>
+          <Text style={styles.distanceBox}>Distance: {distance.toFixed(2)} km</Text>
+          <Text style={styles.durationBox}>Duration: {Math.ceil(duration)} min</Text>
+          </View>
+        ) : null}
 
       </View>
 
@@ -158,6 +192,37 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     fontSize: 16,
     color: 'white',
+  },
+
+  label: {
+    fontSize: 14,
+    fontWeight: 'bold',
+    marginTop: 5,
+    marginBottom: 2,
+  },
+
+  distanceBox: {
+    borderColor: '#888',
+    backgroundColor: 'black',
+    borderWidth: 1,
+    borderRadius: 4,
+    padding: 8,
+    marginBottom: 7,
+    marginTop: 7,
+    color: 'white',
+    fontSize: 14,
+  },
+
+  durationBox: {
+    borderColor: '#888',
+    backgroundColor: 'black', //background colour
+    borderWidth: 1,
+    borderRadius: 4,
+    padding: 8,
+    marginBottom: 7,
+    marginTop: 7,
+    color: 'white', //font colour
+    fontSize: 14,
   },
 
 });

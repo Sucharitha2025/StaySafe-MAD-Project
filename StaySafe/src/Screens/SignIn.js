@@ -17,18 +17,16 @@ import { Octicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import CustomKeyboardView from "../Component/customKeyboard";
 import Loading from "../Component/Loading";
-import { users } from "../data/user"; 
-
+import { useAuth } from "../Context/authContext"; 
+import ForgotPassword from './ForgotPassword'
 export default function SignIn() {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
-  const usernameRef = useRef("");
-  const passwordRef = useRef("");
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const { login } = useAuth(); 
 
   const handleLogin = async () => {
-    const username = usernameRef.current;
-    const password = passwordRef.current;
-
     if (!username || !password) {
       Alert.alert("Sign In", "Please fill all the fields!");
       return;
@@ -36,24 +34,21 @@ export default function SignIn() {
 
     setLoading(true);
 
-    // Simulate login from local users data
-    const user = users.find(
-      (u) =>
-        u.UserUsername.toLowerCase() === username.toLowerCase() &&
-        u.UserPassword === password
-    );
-
+    // Use the login function from AuthContext
+    const result = login(username, password);
+    
     setLoading(false);
 
-    if (!user) {
-      Alert.alert("Sign In", "Invalid username or password");
+    if (!result.success) {
+      Alert.alert("Sign In", result.msg);
     } else {
-      router.replace('HomeScreen')
-     
+      // Navigate to home screen on successful login
+      router.replace("HomeScreen");
     }
   };
 
   return (
+    
     <CustomKeyboardView>
       <View style={{ flex: 1 }}>
         <StatusBar style="dark" />
@@ -85,7 +80,6 @@ export default function SignIn() {
               Sign In
             </Text>
 
-            
             <View
               style={{
                 height: hp(7),
@@ -99,7 +93,8 @@ export default function SignIn() {
             >
               <Octicons name="person" size={hp(2.7)} color="gray" />
               <TextInput
-                onChangeText={(value) => (usernameRef.current = value)}
+                onChangeText={(value) => setUsername(value)}
+                value={username}
                 style={{
                   fontSize: hp(2),
                   flex: 1,
@@ -112,7 +107,6 @@ export default function SignIn() {
               />
             </View>
 
-           
             <View style={{ gap: 10 }}>
               <View
                 style={{
@@ -127,7 +121,8 @@ export default function SignIn() {
               >
                 <Octicons name="lock" size={hp(2.7)} color="gray" />
                 <TextInput
-                  onChangeText={(value) => (passwordRef.current = value)}
+                  onChangeText={(value) => setPassword(value)}
+                  value={password}
                   style={{
                     fontSize: hp(2),
                     flex: 1,
@@ -140,19 +135,22 @@ export default function SignIn() {
                   secureTextEntry
                 />
               </View>
-              <Text
-                style={{
-                  fontSize: hp(1.8),
-                  fontWeight: "600",
-                  textAlign: "right",
-                  color: "#737373",
-                }}
-              >
-                Forgot password?
-              </Text>
-            </View>
 
-            
+            {/* button to reset password   */}
+              <TouchableOpacity onPress={() => router.push("/ForgotPassword")}>
+                <Text
+                  style={{
+                    fontSize: hp(1.8),
+                    fontWeight: "600",
+                    textAlign: "right",
+                    color: "#737373",
+                  }}
+                >
+                  Forgot password?
+                </Text>
+              </TouchableOpacity>
+            </View>
+                    {/* Sign in button to handle user sign process by validating their credientials */}
             <View>
               {loading ? (
                 <View style={{ flexDirection: "row", justifyContent: "center" }}>
@@ -182,31 +180,6 @@ export default function SignIn() {
                   </Text>
                 </TouchableOpacity>
               )}
-            </View>
-
-            
-            <View style={{ flexDirection: "row", justifyContent: "center" }}>
-              <Text
-                style={{
-                  fontSize: hp(1.8),
-                  fontWeight: "600",
-                  color: "#737373",
-                }}
-              >
-                Don't have an account?
-              </Text>
-              <Pressable onPress={() => router.push("/SignUp")}>
-                <Text
-                  style={{
-                    fontSize: hp(1.8),
-                    color: "#5244F3",
-                    fontWeight: "600",
-                    paddingLeft: 4,
-                  }}
-                >
-                  Sign up
-                </Text>
-              </Pressable>
             </View>
           </View>
         </View>

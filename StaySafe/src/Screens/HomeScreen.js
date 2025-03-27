@@ -76,7 +76,7 @@
             longitude: item.geometry.location.lng,
           };
           return (
-          <Marker key={`search-item-${i}`} coordinate={coord} title={item.name} description=''
+          <Marker key={`search-item-${i}`} coordinate={coord} pinColor='red' title={item.name} description=''
           /> 
         );
         })} 
@@ -84,6 +84,7 @@
         {Users.map((users, index) => (
           <Marker
             key={`user-marker-${users.UserID}-${index}`}
+            pinColor='blue' //user marker colour to blue
             coordinate={{
               latitude: users.UserLatitude,
               longitude: users.UserLongitude,
