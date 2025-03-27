@@ -1,8 +1,10 @@
  import { View, StyleSheet, Dimensions, TextInput, TouchableOpacity, Text, Keyboard } from 'react-native'
  import MapView, { Animated, Callout, Marker } from 'react-native-maps';
  import React, { useRef, useState } from 'react'
- import user from '../data/user';
+ import user from '../../data/user';
  import { Image } from 'react-native';
+
+
 
  const { width, height } = Dimensions.get("window");
  const ASPECT_RATIO = width / height;
@@ -181,6 +183,7 @@
      alignItems: 'center',
      justifyContent: 'center',
      backgroundColor: '#26f', 
+     //backgroundColor: 'black',
      paddingVertical: 14,
      borderRadius: 30,
      elevation: 4,
