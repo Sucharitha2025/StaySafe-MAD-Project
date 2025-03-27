@@ -19,6 +19,7 @@ const ActivityScreen = () => {
   const [sharedActivity, setSharedActivity] = useState([]);
 
   const shareActivity = () => {
+
     const newActivity = {
       id: Date.now().toString(),
       departure,
@@ -27,6 +28,7 @@ const ActivityScreen = () => {
       eta,
       status,
     };
+
     setSharedActivity([...sharedActivity, newActivity]);
     setDeparture('');
     setDestination('');
@@ -34,6 +36,8 @@ const ActivityScreen = () => {
     setETA('');
     setStatus('Planned');
   };
+
+  
 
   return (
     <View style={{ flex: 1 }}>

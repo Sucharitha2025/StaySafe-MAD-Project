@@ -1,5 +1,5 @@
  import { View, StyleSheet, Dimensions, TextInput, TouchableOpacity, Text, Keyboard } from 'react-native'
- import MapView, { Animated, Callout, Marker } from 'react-native-maps';
+ import MapView, { Callout, Marker } from 'react-native-maps';
  import React, { useRef, useState } from 'react'
  import user from '../../data/user';
  import { Image } from 'react-native';
@@ -28,6 +28,8 @@
    const [results, setResults] = useState([]);
    const map = useRef(null);
 
+
+   
    const searchPlaces = async () => {
      if (!searchText.trim().length) return;
 
