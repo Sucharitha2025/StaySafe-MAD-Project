@@ -3,7 +3,7 @@ import { StyleSheet, View } from "react-native";
 
 const Screen = ({ children }) => {
     return (
-        <View style={StyleSheet.screen}>
+        <View style={styles.container}>
             {children}
             <StatusBar style='light' />
         </View>

@@ -1,7 +1,9 @@
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
-import ContactListScreen from "./src/Component/screens/ContactListScreen";
-import ContactAddScreen from "./src/Component/screens/ContactAddScreen";
+import ContactListScreen from './src/Component/screens/ContactListScreen';
+import ContactAddScreen from './src/Component/screens/ContactAddScreen';
+import ContactViewScreen from './src/Component/screens/ContactViewScreen.js';
+
 
 const Stack = createNativeStackNavigator();
 
@@ -24,6 +26,11 @@ export const App = () => {
           name="ContactAddScreen"
           component={ContactAddScreen}
           options={{ title: "Contact Add" }}
+        />
+        <Stack.Screen
+          name="ContactViewScreen"
+          component={ContactViewScreen}
+          options={{ title: "Contact View" }}
         />
 
       </Stack.Navigator>
